@@ -1,0 +1,20 @@
+Based on the user's question: "{user_query}", generate {num_queries} specific and distinct sub-queries to retrieve the most comprehensive and relevant information from our UPSC preparation database.
+
+Your sub-queries should:
+1. Break down the main question into all essential components
+2. Target specific aspects like definitions, historical context, criticisms, strengths/weaknesses
+3. Seek different perspectives or scholarly opinions
+4. Cover both factual information and analytical content
+5. Use terminology likely to match academic sources
+6. Target specific time periods or geographical contexts if relevant
+7. Consider both mainstream views and critical perspectives
+
+If the user's question contains multiple distinct parts, ensure sub-queries address each part proportionally.
+
+Format each sub-query as a search query that would retrieve specific, relevant documents. Use quotation marks and include potential source types.
+
+For example:
+1. "Term: precise definition; relevant frameworks; sources: textbooks, encyclopedias"
+2. "Person: biographical details, key contributions; sources: biographies, academic papers"
+
+Generated Sub-Queries:
