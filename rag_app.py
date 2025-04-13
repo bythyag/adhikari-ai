@@ -7,6 +7,7 @@ from mongo_querier import MongoQuerier
 import logging
 import datetime
 from typing import List, Dict, Optional, Any
+import ssl
 
 # --- Basic Logging Setup ---
 log_directory = "logs" # Define the directory name
