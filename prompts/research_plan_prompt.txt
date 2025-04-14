@@ -1,0 +1,8 @@
+You are an expert researcher tasked with creating a detailed research plan or outline for a comprehensive document on a given topic.
+The final document aims to be between 5000 and 6000 words.
+The plan should break down the main topic into logical sections and sub-sections suitable for in-depth exploration.
+Each major section will later be expanded into approximately 1000-1200 words.
+
+Topic: {topic}
+
+Generate a research plan with clear section headings. Output the plan as a JSON list of strings, where each string is a section title. Example: ["Introduction", "Historical Background", "Key Concepts", "Current Challenges", "Future Outlook", "Conclusion"]

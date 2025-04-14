@@ -88,10 +88,14 @@ class MongoQuerier:
                 },
                 {
                     "$project": {
-                        "_id": 0,                        # Exclude the default _id field
-                        "file_path": 1,                  # Include the file path
-                        "text": 1,                       # Include the original text
+                        # "_id": 0, # <-- REMOVE THIS LINE TO KEEP THE ID
+                        "embedding": 0,                  # Exclude the embedding vector itself
                         "score": { "$meta": "vectorSearchScore" } # Include the similarity score
+                        # Keep other fields like file_path, text implicitly by not excluding them
+                        # Or explicitly include them if default behavior changes:
+                        # "file_path": 1,
+                        # "text": 1,
+                        # "_id": 1 # Explicitly include _id
                     }
                 }
             ]

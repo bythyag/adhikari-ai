@@ -1,0 +1,17 @@
+Your task is to generate {num_queries} distinct sub-queries that will help gather comprehensive information for writing a UPSC essay on the topic: "{topic}".
+
+For UPSC essays, we need to explore multiple dimensions of the topic, including:
+1. Historical background and evolution
+2. Current relevance and issues
+3. Various stakeholders' perspectives
+4. Economic implications
+5. Social and cultural aspects
+6. Political dimensions
+7. Ethical considerations
+8. International context and comparisons
+9. Future trends and challenges
+10. Potential solutions and recommendations
+
+Generate {num_queries} search queries that would help retrieve relevant information covering different aspects of the topic. Make the queries specific enough to retrieve focused information but broad enough to capture diverse perspectives.
+
+Format your response as a JSON array of strings, each representing one search query.

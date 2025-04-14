@@ -47,11 +47,21 @@ class ShortNotesConfig:
         self.num_sub_queries: int = 5 # Number of sub-queries to generate
         self.num_retrieved_docs_per_query: int = 15 # How many docs to fetch per query to increase unique doc pool
         self.max_context_words: int = 10000 # Limit context size for LLM
-        self.max_output_tokens: int = 10000 # Max tokens for Gemini output
+        self.max_output_tokens: int = 10000 # Increase if needed, check model limits
+        self.max_output_tokens_section: int = 2000 # Example: Dedicated limit for section generation
         self.gemini_temperature: float = 0.3 # Controls creativity vs factualness
+        self.gemini_temperature_plan: float = 0.2 # More deterministic for planning
+        self.gemini_temperature_section: float = 0.4 # Slightly more creative for section writing
         self.output_directory: str = "short_notes"
         self.doc_text_field: str = 'text' # Field containing document text in MongoDB
         self.doc_id_field: str = '_id' # Field containing the unique document ID in MongoDB
+        # --- Prompt File Paths ---
+        self.prompts_dir: str = "adhikari-ai/prompts"
+        self.research_plan_prompt_file: str = os.path.join(self.prompts_dir, "research_plan_prompt.txt") # New
+        self.section_content_prompt_file: str = os.path.join(self.prompts_dir, "section_content_prompt.txt") # New
+        self.sub_query_prompt_file: str = os.path.join(self.prompts_dir, "short_note_sub_query_prompt.txt")
+        self.short_note_prompt_file: str = os.path.join(self.prompts_dir, "short_note_prompt.txt")
+
 
     def validate(self) -> bool:
         """Basic validation of essential configurations."""
@@ -62,6 +72,23 @@ class ShortNotesConfig:
         if not self.gemini_api_key:
             logging.error("GEMINI_API_KEY environment variable not set.")
             print("GEMINI_API_KEY environment variable not set. Check logs.")
+            return False
+        # Validate prompt files exist
+        if not os.path.exists(self.sub_query_prompt_file):
+            logging.error(f"Sub-query prompt file not found: {self.sub_query_prompt_file}")
+            print(f"Error: Sub-query prompt file not found at {self.sub_query_prompt_file}")
+            return False
+        if not os.path.exists(self.short_note_prompt_file):
+            logging.error(f"Short note prompt file not found: {self.short_note_prompt_file}")
+            print(f"Error: Short note prompt file not found at {self.short_note_prompt_file}")
+            return False
+        if not os.path.exists(self.research_plan_prompt_file): # New check
+            logging.error(f"Research plan prompt file not found: {self.research_plan_prompt_file}")
+            print(f"Error: Research plan prompt file not found at {self.research_plan_prompt_file}")
+            return False
+        if not os.path.exists(self.section_content_prompt_file): # New check
+            logging.error(f"Section content prompt file not found: {self.section_content_prompt_file}")
+            print(f"Error: Section content prompt file not found at {self.section_content_prompt_file}")
             return False
         if not REPORTLAB_AVAILABLE:
             logging.error("reportlab library is required for PDF generation but not found.")
@@ -75,27 +102,167 @@ class GeminiClient:
     def __init__(self, config: ShortNotesConfig):
         self.config = config
         genai.configure(api_key=config.gemini_api_key)
+        # Config for general/sub-query generation (can be reused or specialized)
         self.generation_config = types.GenerationConfig(
             temperature=config.gemini_temperature,
-            max_output_tokens=config.max_output_tokens
+            max_output_tokens=config.max_output_tokens # General purpose limit
         )
-        self.sub_query_generation_config = types.GenerationConfig( # Separate config for sub-queries if needed
-            temperature=0.5, # Slightly more creative for query generation
-            max_output_tokens=500 # Lower token limit for sub-queries
+        # Specific config for plan generation (more deterministic)
+        self.plan_generation_config = types.GenerationConfig(
+            temperature=config.gemini_temperature_plan,
+            max_output_tokens=500 # Plan should be relatively short
         )
+        # Specific config for section content generation (potentially higher token limit)
+        self.section_generation_config = types.GenerationConfig(
+            temperature=config.gemini_temperature_section,
+            max_output_tokens=config.max_output_tokens_section # Dedicated limit
+        )
+        self.sub_query_generation_config = types.GenerationConfig( # Keep for sub-queries
+            temperature=0.5,
+            max_output_tokens=500
+        )
+
+        # Load prompt templates
+        try:
+            self.research_plan_prompt_template = self._load_prompt_template(config.research_plan_prompt_file) # New
+            self.section_content_prompt_template = self._load_prompt_template(config.section_content_prompt_file) # New
+            self.sub_query_prompt_template = self._load_prompt_template(config.sub_query_prompt_file)
+            # self.short_note_prompt_template = self._load_prompt_template(config.short_note_prompt_file) # Remove if not used
+            logging.info("Successfully loaded prompt templates.")
+        except FileNotFoundError as e:
+            logging.error(f"Error loading prompt file: {e}", exc_info=True)
+            raise
+        except Exception as e:
+            logging.error(f"An unexpected error occurred loading prompt files: {e}", exc_info=True)
+            raise
+
         logging.info(f"Gemini client configured for model '{config.gemini_model_name}'.")
 
+    def _load_prompt_template(self, filepath: str) -> str:
+        """Loads a prompt template from a file."""
+        try:
+            with open(filepath, 'r') as f:
+                return f.read()
+        except FileNotFoundError:
+            logging.error(f"Prompt file not found: {filepath}")
+            raise
+        except Exception as e:
+            logging.error(f"Error reading prompt file {filepath}: {e}", exc_info=True)
+            raise
+
+    def generate_research_plan(self, topic: str) -> Optional[List[str]]:
+        """Generates a research plan (list of section titles) for the topic."""
+        try:
+            prompt = self.research_plan_prompt_template.format(topic=topic)
+        except KeyError as e:
+             logging.error(f"Missing placeholder in research_plan_prompt.txt: {e}")
+             print(f"Error: Placeholder {e} missing in research_plan_prompt.txt.")
+             return None
+
+        try:
+            model = genai.GenerativeModel(
+                self.config.gemini_model_name,
+                generation_config=self.plan_generation_config # Use plan config
+                # No system instruction needed if prompt is detailed enough
+            )
+            logging.info(f"Generating research plan for topic: {topic}")
+            response = model.generate_content(prompt)
+
+            # Add response validation (check for blocks, empty parts etc.) - similar to generate_sub_queries
+            if hasattr(response, 'prompt_feedback') and response.prompt_feedback:
+                 logging.warning(f"Gemini Research Plan Prompt Feedback: {response.prompt_feedback}")
+            if not response.parts:
+                 # Handle blocked/failed generation (similar to other methods)
+                 logging.error("Research plan generation blocked or failed.")
+                 print("Research plan generation failed or was blocked. Check logs.")
+                 return None
+
+            # Attempt to parse the response as JSON list
+            try:
+                cleaned_text = response.text.strip().removeprefix("```json").removesuffix("```").strip()
+                plan = json.loads(cleaned_text)
+                if isinstance(plan, list) and all(isinstance(section, str) for section in plan):
+                    logging.info(f"Successfully generated research plan with {len(plan)} sections.")
+                    return plan
+                else:
+                    logging.error(f"Gemini returned research plan in unexpected format: {plan}")
+                    print("Failed to parse research plan from Gemini response. Check logs.")
+                    return None
+            except json.JSONDecodeError as jde:
+                logging.error(f"Failed to decode JSON response for research plan: {jde}. Response text: {response.text}")
+                print("Failed to parse research plan (JSON decode error). Check logs.")
+                # Fallback: Try splitting by newline if JSON fails? Or just fail.
+                # lines = response.text.strip().split('\n')
+                # plan = [line.strip('- ').strip() for line in lines if line.strip()]
+                # if plan:
+                #     logging.warning("Failed JSON parsing for plan, using newline splitting as fallback.")
+                #     return plan
+                return None
+            except Exception as e:
+                 logging.error(f"Error processing research plan response: {e}. Response text: {response.text}", exc_info=True)
+                 print("An error occurred while processing the research plan. Check logs.")
+                 return None
+
+        # Add exception handling (BlockedPromptException, StopCandidateException, etc.) - similar to other methods
+        except Exception as e:
+            logging.error(f"Error generating research plan with Gemini: {e}", exc_info=True)
+            print("An error occurred during research plan generation. Check logs.")
+            return None
+
+    def generate_section_content(self, main_topic: str, section_title: str, context: str) -> Optional[str]:
+        """Generates detailed content for a specific section using context."""
+        try:
+            prompt = self.section_content_prompt_template.format(
+                main_topic=main_topic,
+                section_title=section_title,
+                context=context
+            )
+        except KeyError as e:
+             logging.error(f"Missing placeholder in section_content_prompt.txt: {e}")
+             print(f"Error: Placeholder {e} missing in section_content_prompt.txt.")
+             return None
+
+        try:
+            model = genai.GenerativeModel(
+                self.config.gemini_model_name,
+                generation_config=self.section_generation_config # Use section config
+            )
+            logging.info(f"Generating content for section: '{section_title}' (Topic: {main_topic})")
+            response = model.generate_content(prompt)
+
+            # Add response validation (check for blocks, empty parts etc.) - similar to generate_short_note
+            if hasattr(response, 'prompt_feedback') and response.prompt_feedback:
+                 logging.warning(f"Gemini Section Content Prompt Feedback: {response.prompt_feedback}")
+            if not response.parts:
+                 # Handle blocked/failed generation
+                 logging.error(f"Content generation failed/blocked for section: {section_title}")
+                 print(f"Content generation failed or was blocked for section '{section_title}'. Check logs.")
+                 return None
+
+            logging.info(f"Successfully generated content for section: '{section_title}'")
+            return response.text
+
+        # Add exception handling (BlockedPromptException, StopCandidateException, etc.) - similar to generate_short_note
+        except Exception as e:
+            logging.error(f"Error generating content for section '{section_title}': {e}", exc_info=True)
+            print(f"An error occurred during content generation for section '{section_title}'. Check logs.")
+            return None
+
+    # Keep generate_sub_queries as it might be used per section
     def generate_sub_queries(self, topic: str) -> Optional[List[str]]:
-        """Generates sub-queries related to the main topic."""
-        system_instruction = f"""You are an expert researcher. Given a main topic, break it down into {self.config.num_sub_queries} specific and diverse sub-topics or questions that would be useful for searching a database to gather comprehensive information.
-Focus on different facets, key aspects, related concepts, or specific questions about the topic.
-Return the sub-queries as a JSON list of strings. For example: ["sub-query 1", "sub-query 2", "sub-query 3", "sub-query 4", "sub-query 5"]
+        # ... (implementation remains the same, but it will be called with section titles) ...
+        # Format the system instruction using the loaded template
+        try:
+            system_instruction = self.sub_query_prompt_template.format(
+                num_sub_queries=self.config.num_sub_queries,
+                topic=topic # Use the passed topic (which might be a section title)
+            )
+        except KeyError as e:
+             logging.error(f"Missing placeholder in sub_query_prompt.txt: {e}")
+             print(f"Error: Placeholder {e} missing in sub_query_prompt.txt. Check the file.")
+             return None
 
-**Main Topic:** {topic}
----
-Generate the JSON list of sub-queries now:"""
-
-        prompt = f"Generate {self.config.num_sub_queries} sub-queries for the topic: {topic}" # Simple user prompt
+        prompt = f"Generate {self.config.num_sub_queries} specific sub-queries for the research section: {topic}" # Modified prompt
 
         try:
             model = genai.GenerativeModel(
@@ -103,9 +270,10 @@ Generate the JSON list of sub-queries now:"""
                 generation_config=self.sub_query_generation_config, # Use specific config
                 system_instruction=system_instruction
             )
-            logging.info(f"Generating sub-queries for topic: {topic}")
+            logging.info(f"Generating sub-queries for section/topic: {topic}")
             response = model.generate_content(prompt)
 
+            # ... rest of the sub-query generation logic remains the same ...
             if hasattr(response, 'prompt_feedback') and response.prompt_feedback:
                  logging.warning(f"Gemini Sub-query Prompt Feedback: {response.prompt_feedback}")
 
@@ -149,92 +317,6 @@ Generate the JSON list of sub-queries now:"""
         except Exception as e:
             logging.error(f"Error generating sub-queries with Gemini: {e}", exc_info=True)
             print("An error occurred during sub-query generation. Check logs.")
-        return None
-
-
-    def generate_short_note(self, topic: str, context: str) -> Optional[str]:
-        """Generates a short note using the configured Gemini model."""
-        system_instruction = f"""You are an expert UPSC exam notes creator. Your task is to generate concise, comprehensive, and well-structured study notes on the given topic.
-
-Use the provided context below, which contains relevant information retrieved from various sources based on the main topic and related sub-queries.
-
-Follow these UPSC note-making principles:
-1. Focus on core concepts, key facts, and important examples only
-2. Use headings, subheadings, and bullet points for clear organization
-3. Integrate static subject knowledge with relevant current affairs
-4. Highlight keywords and important definitions
-5. Include brief illustrative examples where helpful
-6. Draw connections between related concepts
-7. Create notes that serve both Prelims (factual recall) and Mains (analytical depth) exam needs
-
-**Example Note Format:**
-# MAIN TOPIC
-## Key Concept 1
-- Important point about this concept
-- Another important point
-- **Current Update:** Recent development related to this concept
-
-## Key Concept 2
-- Definition and significance
-- Important facts and figures
-- Relevant examples
-
-**Main Topic:** {topic}
-
-**Context:**
-{context}
----
-Generate the UPSC short note now:"""
-
-        # Few-shot prompt to guide the model's output structure
-        prompt = f"""Generate comprehensive UPSC study notes on: {topic}
-
-Example of good UPSC notes structure:
-1. Start with core definitions and background
-2. Organize information under clear headings
-3. Use bullet points for key facts
-4. Highlight important terms in bold
-5. Include current affairs developments 
-6. Add a brief conclusion
-"""
-
-        try:
-            model = genai.GenerativeModel(
-                self.config.gemini_model_name,
-                generation_config=self.generation_config,
-                system_instruction=system_instruction # Use system instruction for detailed guidance
-            )
-            logging.info(f"Generating short note for topic: {topic}")
-            response = model.generate_content(prompt) # Pass only the simple prompt here
-
-            if hasattr(response, 'prompt_feedback') and response.prompt_feedback:
-                 logging.warning(f"Gemini Prompt Feedback: {response.prompt_feedback}")
-
-            # Check if the response was blocked or stopped early
-            if not response.parts:
-                 if response.candidates and response.candidates[0].finish_reason != 'STOP':
-                     logging.error(f"Generation stopped due to reason: {response.candidates[0].finish_reason}")
-                     print(f"Note generation failed or was stopped. Reason: {response.candidates[0].finish_reason}. Check logs.")
-                     return None
-                 else: # Likely blocked
-                     logging.error("Generation blocked or failed with no specific reason provided in response.")
-                     print("Note generation failed or was blocked. Check logs.")
-                     return None
-
-            return response.text
-
-        except types.generation_types.BlockedPromptException as bpe:
-             logging.error(f"Prompt blocked by Gemini safety settings: {bpe}")
-             print("The request was blocked by the content safety filter. Check logs.")
-        except types.generation_types.StopCandidateException as sce:
-             logging.error(f"Generation stopped unexpectedly by Gemini: {sce}")
-             print(sce.partial_text if hasattr(sce, 'partial_text') else "Generation stopped unexpectedly.")
-             return sce.partial_text if hasattr(sce, 'partial_text') else None # Return partial if available
-        except Exception as e:
-            logging.error(f"Error generating content with Gemini: {e}", exc_info=True)
-            if 'response' in locals() and hasattr(response, 'prompt_feedback') and response.prompt_feedback:
-                logging.warning(f"Gemini Prompt Feedback: {response.prompt_feedback}")
-            print("An error occurred during note generation. Check logs.")
         return None
 
 # --- Context Formatter (Simplified) ---
@@ -426,9 +508,9 @@ class PDFGenerator:
 
 # --- Short Notes Generator Application ---
 class ShortNotesGeneratorApp:
-    """Orchestrates the short notes generation process."""
+    """Orchestrates the deep research document generation process."""
     def __init__(self):
-        logging.info("Initializing Short Notes Generator Application...")
+        logging.info("Initializing Deep Research Generator Application...")
         self.config = ShortNotesConfig()
         if not self.config.validate():
             raise ValueError("Configuration validation failed. Check logs.")
@@ -443,134 +525,151 @@ class ShortNotesGeneratorApp:
         self.gemini_client = GeminiClient(self.config)
         self.formatter = ContextFormatter(self.config)
         self.pdf_generator = PDFGenerator(self.config)
-        logging.info("Short Notes Generator Application initialized successfully.")
+        logging.info("Deep Research Generator Application initialized successfully.")
 
     def run(self):
-        """Executes the main short notes generation workflow."""
+        """Executes the deep research generation workflow."""
+        final_content = ""
         try:
             # 1. Get Topic from User
-            topic = input("Enter the topic for the short note: ")
-            if not topic:
+            main_topic = input("Enter the main topic for the deep research document: ")
+            if not main_topic:
                 logging.warning("No topic entered. Exiting.")
                 print("No topic entered.")
                 return
 
-            # 2. Generate Sub-queries using Gemini
-            print("Generating relevant sub-queries...")
-            sub_queries = self.gemini_client.generate_sub_queries(topic)
-            if not sub_queries:
-                logging.warning(f"Could not generate sub-queries for topic: '{topic}'. Proceeding with main topic only.")
-                print("Warning: Could not generate sub-queries. Proceeding with the main topic only.")
-                queries_to_search = [topic]
-            else:
-                logging.info(f"Generated sub-queries: {sub_queries}")
-                print(f"Generated {len(sub_queries)} sub-queries.")
-                # Combine main topic with sub-queries for searching
-                queries_to_search = [topic] + sub_queries
+            # 2. Generate Research Plan
+            print(f"Generating research plan for: {main_topic}...")
+            research_plan = self.gemini_client.generate_research_plan(main_topic)
 
-            # 3. Retrieve Documents from MongoDB for all queries
-            print(f"Retrieving documents for '{topic}' and related sub-queries...")
-            all_retrieved_docs = [] # Renamed from all_unique_docs
-            # seen_doc_ids = set() # Removed uniqueness check
-            total_retrieved_count = 0
+            if not research_plan:
+                logging.error(f"Failed to generate research plan for topic: '{main_topic}'. Aborting.")
+                print("Error: Could not generate a research plan for this topic. Check logs.")
+                return
 
-            for i, query in enumerate(queries_to_search):
-                logging.info(f"Searching documents for query {i+1}/{len(queries_to_search)}: '{query}'")
-                try:
-                    search_results = self.mongo_querier.search_similar_documents(
-                        query,
-                        top_k=self.config.num_retrieved_docs_per_query
-                    )
+            logging.info(f"Generated research plan: {research_plan}")
+            print(f"Research plan generated with {len(research_plan)} sections.")
 
-                    if search_results:
-                        docs_added_for_query = len(search_results)
-                        total_retrieved_count += docs_added_for_query
-                        all_retrieved_docs.extend(search_results) # Add all results directly
-                        logging.info(f"Added {docs_added_for_query} documents from query '{query}'. Total documents collected: {len(all_retrieved_docs)}")
-                        # Removed uniqueness check logic
-                        # new_docs_for_query = 0
-                        # for doc in search_results:
-                        #     doc_id = doc.get(self.config.doc_id_field)
-                        #     if doc_id is None:
-                        #         logging.warning(f"Document missing ID field ('{self.config.doc_id_field}'). Skipping.")
-                        #         continue
-                        #     # Convert ObjectId to str if necessary for the set
-                        #     doc_id_str = str(doc_id)
-                        #     # if doc_id_str not in seen_doc_ids: # Removed uniqueness check
-                        #     #     seen_doc_ids.add(doc_id_str)
-                        #     all_retrieved_docs.append(doc)
-                        #     new_docs_for_query += 1
-                        # logging.info(f"Added {new_docs_for_query} new unique documents from query '{query}'. Total unique docs: {len(all_retrieved_docs)}")
-                    elif search_results is None: # Indicates an error during search
-                         logging.error(f"Error retrieving documents for query: '{query}'")
-                         print(f"Warning: Failed to retrieve documents for query '{query}'. Check logs.")
-                         # Continue with other queries
-                    else: # Empty list returned
-                        logging.info(f"No documents found for query: '{query}'")
+            # 3. Iterate through sections, generate content for each
+            all_section_content = []
+            total_sections = len(research_plan)
+            for i, section_title in enumerate(research_plan):
+                print(f"\n--- Processing Section {i+1}/{total_sections}: {section_title} ---")
+                logging.info(f"--- Processing Section {i+1}/{total_sections}: {section_title} ---")
 
-                except Exception as e:
-                    logging.exception(f"Error during document search for query '{query}': {e}")
-                    print(f"An error occurred while searching for query '{query}'. Check logs.")
-                    # Continue with other queries
-
-            logging.info(f"Total documents retrieved across all queries: {total_retrieved_count}") # Updated log message
-            print(f"Found {len(all_retrieved_docs)} relevant documents (including potential duplicates).") # Updated print message
-
-            if not all_retrieved_docs:
-                logging.warning(f"No documents found in MongoDB for topic '{topic}' or its sub-queries.")
-                print("No relevant documents found in the database for this topic or related sub-queries.")
-                # Let context formatter handle empty results, LLM will be informed.
-
-            # Deduplicate documents based on document ID
-            seen_doc_ids = set()
-            unique_docs = []
-            for doc in all_retrieved_docs:
-                doc_id = doc.get(self.config.doc_id_field)
-                if doc_id is None:
-                    logging.warning(f"Document missing ID field ('{self.config.doc_id_field}'). Skipping.")
-                    continue
-                # Convert ObjectId to str if necessary
-                doc_id_str = str(doc_id)
-                if doc_id_str not in seen_doc_ids:
-                    seen_doc_ids.add(doc_id_str)
-                    unique_docs.append(doc)
-            
-            logging.info(f"Deduplicated {len(all_retrieved_docs)} documents to {len(unique_docs)} unique documents.")
-            print(f"Deduplicating documents: {len(unique_docs)} unique documents out of {len(all_retrieved_docs)} total.")
-
-            # 4. Format Context from retrieved documents
-            context_str = self.formatter.format(unique_docs)  # Pass the deduplicated list
-
-            # 5. Generate Short Note using Gemini
-            print("Generating short note using Gemini...")
-            logging.info("Generating short note using Gemini...")
-            note_content = self.gemini_client.generate_short_note(topic, context_str)
-
-            # 6. Save Note as PDF
-            if note_content:
-                print("\n--- Generated Short Note ---")
-                print(note_content)
-                print("--------------------------")
-                logging.info("Saving generated note to PDF...")
-                pdf_filepath = self.pdf_generator.generate(topic, note_content)
-                if pdf_filepath:
-                    print(f"Short note saved successfully to: {pdf_filepath}")
+                # 3a. Generate Sub-queries for the section
+                print(f"Generating sub-queries for section: '{section_title}'...")
+                sub_queries = self.gemini_client.generate_sub_queries(section_title) # Use section title as topic
+                if not sub_queries:
+                    logging.warning(f"Could not generate sub-queries for section: '{section_title}'. Proceeding with section title only.")
+                    print("Warning: Could not generate sub-queries. Using section title for search.")
+                    queries_to_search = [section_title]
                 else:
-                    print("Failed to save the note as a PDF file. Check logs.")
-            else:
-                # Specific message if context was empty vs. LLM failure
-                if not context_str or context_str == "No relevant information found in the database.":
-                     print("\n[Could not generate a short note because no relevant information was found in the database.]")
-                     logging.warning(f"Note generation skipped for topic '{topic}' due to lack of context.")
+                    logging.info(f"Generated sub-queries for section: {sub_queries}")
+                    print(f"Generated {len(sub_queries)} sub-queries for this section.")
+                    queries_to_search = [section_title] + sub_queries # Search section title + sub-queries
+
+                # 3b. Retrieve Documents for the section
+                print(f"Retrieving documents relevant to '{section_title}'...")
+                section_docs_retrieved = []
+                # seen_doc_ids_section = set() # Track IDs *per section* if needed, or use global deduplication later
+
+                for q_idx, query in enumerate(queries_to_search):
+                    logging.info(f"Searching documents for section query {q_idx+1}/{len(queries_to_search)}: '{query}'")
+                    try:
+                        search_results = self.mongo_querier.search_similar_documents(
+                            query,
+                            top_k=self.config.num_retrieved_docs_per_query # Fetch enough docs per query
+                        )
+                        if search_results:
+                            section_docs_retrieved.extend(search_results)
+                            logging.info(f"Added {len(search_results)} documents from query '{query}'. Total for section: {len(section_docs_retrieved)}")
+                        elif search_results is None:
+                             logging.error(f"Error retrieving documents for section query: '{query}'")
+                             print(f"Warning: Failed to retrieve documents for query '{query}'. Check logs.")
+                        else:
+                            logging.info(f"No documents found for section query: '{query}'")
+                    except Exception as e:
+                        logging.exception(f"Error during document search for section query '{query}': {e}")
+                        print(f"An error occurred while searching for query '{query}'. Check logs.")
+
+                logging.info(f"Total documents retrieved for section '{section_title}': {len(section_docs_retrieved)}")
+
+                # Deduplicate documents retrieved *for this section*
+                seen_doc_ids_section = set()
+                unique_docs_section = []
+                for doc in section_docs_retrieved:
+                    doc_id = doc.get(self.config.doc_id_field)
+                    if doc_id is None: continue
+                    doc_id_str = str(doc_id)
+                    if doc_id_str not in seen_doc_ids_section:
+                        seen_doc_ids_section.add(doc_id_str)
+                        unique_docs_section.append(doc)
+                
+                logging.info(f"Deduplicated to {len(unique_docs_section)} unique documents for section '{section_title}'.")
+                print(f"Found {len(unique_docs_section)} unique relevant documents for this section.")
+
+                if not unique_docs_section:
+                    logging.warning(f"No unique documents found for section '{section_title}'. Skipping content generation for this section.")
+                    print("Warning: No relevant documents found for this section. Content generation skipped.")
+                    all_section_content.append(f"# {section_title}\n\n[No relevant information found in the database for this section.]\n\n")
+                    continue # Skip to the next section
+
+                # 3c. Format Context for the section
+                context_str = self.formatter.format(unique_docs_section)
+
+                # 3d. Generate Content for the section using Gemini
+                print(f"Generating content for section: '{section_title}'...")
+                logging.info(f"Generating content for section '{section_title}' using {len(unique_docs_section)} documents context.")
+                section_content = self.gemini_client.generate_section_content(main_topic, section_title, context_str)
+
+                if section_content:
+                    # Add section title as a markdown heading before the content
+                    formatted_section = f"# {section_title}\n\n{section_content.strip()}\n\n"
+                    all_section_content.append(formatted_section)
+                    print(f"Successfully generated content for section: '{section_title}'.")
+                    logging.info(f"Successfully generated content for section: '{section_title}'. Word count approx: {len(section_content.split())}")
                 else:
-                    print("\n[Could not generate a short note for this topic. An error occurred during generation or the request was blocked.]")
-                    logging.warning(f"Failed to generate note content for topic: {topic}")
+                    logging.warning(f"Failed to generate content for section: '{section_title}'.")
+                    print(f"Warning: Failed to generate content for section '{section_title}'. Adding placeholder.")
+                    # Add placeholder if generation fails but context was present
+                    all_section_content.append(f"# {section_title}\n\n[Error generating content for this section. Context was available.]\n\n")
+
+            # 4. Combine all generated sections
+            print("\n--- Combining all sections ---")
+            final_content = "".join(all_section_content)
+
+            if not final_content.strip():
+                 logging.error("Failed to generate content for any section. Final document is empty.")
+                 print("\nError: No content could be generated for any section. Final document is empty.")
+                 return
+
+            # Estimate final word count
+            final_word_count = len(final_content.split())
+            logging.info(f"Combined final document content. Estimated word count: {final_word_count}")
+            print(f"Combined document generated with estimated {final_word_count} words.")
+
+            # 5. Save Final Document as PDF
+            print("Saving final document to PDF...")
+            logging.info("Saving final document to PDF...")
+            # Use the main topic for the filename
+            pdf_filepath = self.pdf_generator.generate(main_topic, final_content)
+
+            if pdf_filepath:
+                print(f"\nDeep research document saved successfully to: {pdf_filepath}")
+            else:
+                print("\nError: Failed to save the final document as a PDF file. Check logs.")
+                # Optionally print the final content to console if PDF fails
+                # print("\n--- Final Document Content ---")
+                # print(final_content)
+                # print("-----------------------------")
+
 
         except Exception as e:
             logging.exception(f"An unexpected error occurred in ShortNotesGeneratorApp.run: {e}")
-            print("An unexpected error occurred. Check logs for details.")
+            print(f"An unexpected error occurred: {e}. Check logs for details.")
         finally:
-            # 7. Close Connections
+            # 6. Close Connections
             if hasattr(self, 'mongo_querier') and self.mongo_querier:
                 self.mongo_querier.close_connection()
             logging.info("Script finished.")

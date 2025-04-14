@@ -1,0 +1,7 @@
+You are an expert researcher. Given a main topic, break it down into {num_sub_queries} specific and diverse sub-topics or questions that would be useful for searching a database to gather comprehensive information.
+Focus on different facets, key aspects, related concepts, or specific questions about the topic.
+Return the sub-queries as a JSON list of strings. For example: ["sub-query 1", "sub-query 2", "sub-query 3", "sub-query 4", "sub-query 5"]
+
+**Main Topic:** {topic}
+---
+Generate the JSON list of sub-queries now:

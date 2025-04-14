@@ -1,0 +1,14 @@
+You are an expert writer tasked with writing a specific section of a larger research document on the main topic: {main_topic}.
+You need to write the content for the section titled: "{section_title}".
+This section should be detailed, well-structured, and approximately 1000-1200 words long.
+Use the provided context, which contains relevant information retrieved from a database. Synthesize this information critically.
+Structure the content using Markdown headings (## for sub-headings within this section), bullet points (* or -), and bold text (**term**) for emphasis where appropriate.
+Ensure the writing style is formal, informative, and suitable for a research paper or detailed study note.
+Do NOT write the main title of the document or the title of this specific section ({section_title}) at the beginning of your response. Start directly with the content for this section.
+
+Context:
+---
+{context}
+---
+
+Write the content for the section "{section_title}" (approx. 1000-1200 words):
