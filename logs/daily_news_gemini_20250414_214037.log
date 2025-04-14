@@ -1,0 +1,97 @@
+2025-04-14 21:40:37,141 - INFO - Initializing Daily News Analyzer Application...
+2025-04-14 21:40:37,142 - INFO - Gemini API configured successfully.
+2025-04-14 21:40:37,142 - INFO - Successfully loaded Gemini prompt templates.
+2025-04-14 21:40:37,142 - INFO - Gemini client initialized with model 'models/gemini-2.0-flash'.
+2025-04-14 21:40:37,142 - INFO - Daily News Analyzer Application initialized successfully.
+2025-04-14 21:40:37,142 - INFO - Fetching news for date: 2025-04-13
+2025-04-14 21:40:37,142 - INFO - Generating search queries for topic: India Polity and Governance
+2025-04-14 21:40:40,740 - INFO - Successfully generated 3 queries for 'India Polity and Governance'.
+2025-04-14 21:40:40,741 - INFO - Searching Tavily for specific query: 'site:.prsindia.org OR site:.pib.gov.in "India Polity" OR "Indian Governance" "policy changes" OR "government schemes" OR "economic indicators" OR "environmental issues" "2025-04-13"' (Broad Topic: India Polity and Governance)
+2025-04-14 21:40:45,540 - INFO -     Found 3 results for query: 'site:.prsindia.org OR site:.pib.gov.in "India Polity" OR "Indian Governance" "policy changes" OR "government schemes" OR "economic indicators" OR "environmental issues" "2025-04-13"'
+2025-04-14 21:40:46,546 - INFO - Searching Tavily for specific query: '"UPSC" AND ("India" AND ("Parliament" OR "Supreme Court" OR "Election Commission" OR "Government" OR "Constitutional Amendment")) AND ("2025-04-13") AND ("Polity" OR "Governance" OR "Law" OR "Judiciary")' (Broad Topic: India Polity and Governance)
+2025-04-14 21:40:50,566 - INFO -     Found 3 results for query: '"UPSC" AND ("India" AND ("Parliament" OR "Supreme Court" OR "Election Commission" OR "Government" OR "Constitutional Amendment")) AND ("2025-04-13") AND ("Polity" OR "Governance" OR "Law" OR "Judiciary")'
+2025-04-14 21:40:51,570 - INFO - Searching Tavily for specific query: '"India" AND ("governance" OR "polity") AND ("economic policy" OR "social justice" OR "international relations" OR "defense policy" OR "internal security") AND ("2025-04-13") -site:youtube.com -site:wikipedia.org' (Broad Topic: India Polity and Governance)
+2025-04-14 21:40:58,731 - INFO -     Found 3 results for query: '"India" AND ("governance" OR "polity") AND ("economic policy" OR "social justice" OR "international relations" OR "defense policy" OR "internal security") AND ("2025-04-13") -site:youtube.com -site:wikipedia.org'
+2025-04-14 21:40:59,738 - INFO - Collected 9 unique results for broad topic: India Polity and Governance
+2025-04-14 21:40:59,738 - INFO - Generating search queries for topic: India Economy and Development
+2025-04-14 21:41:01,148 - INFO - Successfully generated 3 queries for 'India Economy and Development'.
+2025-04-14 21:41:01,149 - INFO - Searching Tavily for specific query: 'India economy 'policy changes' OR 'government schemes' 'economic indicators' 2025-04-13 site:.prsindia.in OR site:.rbi.org.in' (Broad Topic: India Economy and Development)
+2025-04-14 21:41:04,581 - INFO -     Found 3 results for query: 'India economy 'policy changes' OR 'government schemes' 'economic indicators' 2025-04-13 site:.prsindia.in OR site:.rbi.org.in'
+2025-04-14 21:41:05,586 - INFO - Searching Tavily for specific query: 'India 'development' 'environmental issues' OR 'scientific advancements' OR 'geopolitical developments' 2025-04-13 -site:.wikipedia.org' (Broad Topic: India Economy and Development)
+2025-04-14 21:41:09,341 - INFO -     Found 3 results for query: 'India 'development' 'environmental issues' OR 'scientific advancements' OR 'geopolitical developments' 2025-04-13 -site:.wikipedia.org'
+2025-04-14 21:41:10,342 - INFO - Searching Tavily for specific query: '"India Economy" "UPSC" ('economic growth' OR 'poverty reduction' OR 'infrastructure development') 2025-04-13 site:.pib.gov.in OR site:.thehindubusinessline.com' (Broad Topic: India Economy and Development)
+2025-04-14 21:41:14,297 - INFO -     Found 3 results for query: '"India Economy" "UPSC" ('economic growth' OR 'poverty reduction' OR 'infrastructure development') 2025-04-13 site:.pib.gov.in OR site:.thehindubusinessline.com'
+2025-04-14 21:41:15,303 - INFO - Collected 9 unique results for broad topic: India Economy and Development
+2025-04-14 21:41:15,304 - INFO - Generating search queries for topic: India Geography
+2025-04-14 21:41:16,779 - INFO - Successfully generated 3 queries for 'India Geography'.
+2025-04-14 21:41:16,779 - INFO - Searching Tavily for specific query: 'India geography "government schemes" OR "policy changes" OR "economic impact" site:.gov.in OR site:.prsindia.org date:2025-04-13' (Broad Topic: India Geography)
+2025-04-14 21:41:22,181 - WARNING -     No results found for query: 'India geography "government schemes" OR "policy changes" OR "economic impact" site:.gov.in OR site:.prsindia.org date:2025-04-13'.
+2025-04-14 21:41:23,185 - INFO - Searching Tavily for specific query: '"India geography" AND (environment OR climate OR resources OR "disaster management") AND (UPSC OR "civil services") date:2025-04-13' (Broad Topic: India Geography)
+2025-04-14 21:41:26,545 - INFO -     Found 3 results for query: '"India geography" AND (environment OR climate OR resources OR "disaster management") AND (UPSC OR "civil services") date:2025-04-13'
+2025-04-14 21:41:27,549 - INFO - Searching Tavily for specific query: '"India geography" AND (geopolitics OR "border disputes" OR "regional development" OR infrastructure) date:2025-04-13' (Broad Topic: India Geography)
+2025-04-14 21:41:30,920 - INFO -     Found 3 results for query: '"India geography" AND (geopolitics OR "border disputes" OR "regional development" OR infrastructure) date:2025-04-13'
+2025-04-14 21:41:31,924 - INFO - Collected 6 unique results for broad topic: India Geography
+2025-04-14 21:41:31,925 - INFO - Generating search queries for topic: India Environment and Ecology
+2025-04-14 21:41:33,751 - INFO - Successfully generated 3 queries for 'India Environment and Ecology'.
+2025-04-14 21:41:33,751 - INFO - Searching Tavily for specific query: '"India environment policy changes" OR "India ecology government schemes" site:.gov.in OR site:.nic.in date:2025-04-13' (Broad Topic: India Environment and Ecology)
+2025-04-14 21:41:37,230 - INFO -     Found 3 results for query: '"India environment policy changes" OR "India ecology government schemes" site:.gov.in OR site:.nic.in date:2025-04-13'
+2025-04-14 21:41:38,235 - INFO - Searching Tavily for specific query: '"India environmental issues" AND ("air quality" OR "water pollution" OR "deforestation" OR "climate change" OR "biodiversity") site:.thehindu.com OR site:.indianexpress.com date:2025-04-13' (Broad Topic: India Environment and Ecology)
+2025-04-14 21:41:41,430 - INFO -     Found 3 results for query: '"India environmental issues" AND ("air quality" OR "water pollution" OR "deforestation" OR "climate change" OR "biodiversity") site:.thehindu.com OR site:.indianexpress.com date:2025-04-13'
+2025-04-14 21:41:42,435 - INFO - Searching Tavily for specific query: '"India ecology" AND ("economic impact" OR "scientific advancements" OR "geopolitical implications") AND ("environment ministry" OR "forest survey" OR "wildlife institute") date:2025-04-13' (Broad Topic: India Environment and Ecology)
+2025-04-14 21:41:46,550 - WARNING -     No results found for query: '"India ecology" AND ("economic impact" OR "scientific advancements" OR "geopolitical implications") AND ("environment ministry" OR "forest survey" OR "wildlife institute") date:2025-04-13'.
+2025-04-14 21:41:47,554 - INFO - Collected 6 unique results for broad topic: India Environment and Ecology
+2025-04-14 21:41:47,554 - INFO - Generating search queries for topic: India Science and Technology
+2025-04-14 21:41:48,921 - INFO - Successfully generated 3 queries for 'India Science and Technology'.
+2025-04-14 21:41:48,922 - INFO - Searching Tavily for specific query: '"India Science and Technology policy changes" OR "India technology schemes" site:.gov.in "April 13, 2025" OR "yesterday"' (Broad Topic: India Science and Technology)
+2025-04-14 21:41:52,799 - INFO -     Found 3 results for query: '"India Science and Technology policy changes" OR "India technology schemes" site:.gov.in "April 13, 2025" OR "yesterday"'
+2025-04-14 21:41:53,804 - INFO - Searching Tavily for specific query: '"India scientific advancements" OR "India technology breakthroughs" OR "India space program" -"advertisement" "April 13, 2025" OR "yesterday"' (Broad Topic: India Science and Technology)
+2025-04-14 21:41:57,406 - INFO -     Found 3 results for query: '"India scientific advancements" OR "India technology breakthroughs" OR "India space program" -"advertisement" "April 13, 2025" OR "yesterday"'
+2025-04-14 21:41:58,412 - INFO - Searching Tavily for specific query: '"India environmental technology" OR "India renewable energy policy" OR "India climate change initiatives" "April 13, 2025" OR "yesterday"' (Broad Topic: India Science and Technology)
+2025-04-14 21:42:02,219 - INFO -     Found 3 results for query: '"India environmental technology" OR "India renewable energy policy" OR "India climate change initiatives" "April 13, 2025" OR "yesterday"'
+2025-04-14 21:42:03,222 - INFO - Collected 9 unique results for broad topic: India Science and Technology
+2025-04-14 21:42:03,222 - INFO - Generating search queries for topic: India Art, Culture, and History context in news
+2025-04-14 21:42:04,883 - INFO - Successfully generated 3 queries for 'India Art, Culture, and History context in news'.
+2025-04-14 21:42:04,884 - INFO - Searching Tavily for specific query: '"India Art Culture History" AND ("policy changes" OR "government schemes" OR "significant events") site:.gov.in OR site:.nic.in date:2025-04-13' (Broad Topic: India Art, Culture, and History context in news)
+2025-04-14 21:42:08,568 - INFO -     Found 3 results for query: '"India Art Culture History" AND ("policy changes" OR "government schemes" OR "significant events") site:.gov.in OR site:.nic.in date:2025-04-13'
+2025-04-14 21:42:09,574 - INFO - Searching Tavily for specific query: '"Indian Heritage" AND ("economic impact" OR "environmental impact" OR "geopolitical implications" OR "historical context") -"sports" -"entertainment" date:2025-04-13' (Broad Topic: India Art, Culture, and History context in news)
+2025-04-14 21:42:18,465 - INFO -     Found 3 results for query: '"Indian Heritage" AND ("economic impact" OR "environmental impact" OR "geopolitical implications" OR "historical context") -"sports" -"entertainment" date:2025-04-13'
+2025-04-14 21:42:19,471 - INFO - Searching Tavily for specific query: '"India History" OR "Indian Culture" OR "Indian Art" AND ("UPSC" OR "Civil Services Exam" OR "IAS") AND ("current affairs" OR "news analysis") date:2025-04-13' (Broad Topic: India Art, Culture, and History context in news)
+2025-04-14 21:42:23,010 - INFO -     Found 3 results for query: '"India History" OR "Indian Culture" OR "Indian Art" AND ("UPSC" OR "Civil Services Exam" OR "IAS") AND ("current affairs" OR "news analysis") date:2025-04-13'
+2025-04-14 21:42:23,011 - INFO -     Filtered out 1 duplicate URLs for query: '"India History" OR "Indian Culture" OR "Indian Art" AND ("UPSC" OR "Civil Services Exam" OR "IAS") AND ("current affairs" OR "news analysis") date:2025-04-13'
+2025-04-14 21:42:24,013 - INFO - Collected 8 unique results for broad topic: India Art, Culture, and History context in news
+2025-04-14 21:42:24,014 - INFO - Generating search queries for topic: India International Relations and Security
+2025-04-14 21:42:25,777 - INFO - Successfully generated 3 queries for 'India International Relations and Security'.
+2025-04-14 21:42:25,778 - INFO - Searching Tavily for specific query: 'India "international relations" security "policy changes" "government schemes" site:.mea.gov.in OR site:.idsa.in OR site:.pib.gov.in date:2025-04-13' (Broad Topic: India International Relations and Security)
+2025-04-14 21:42:31,498 - WARNING -     No results found for query: 'India "international relations" security "policy changes" "government schemes" site:.mea.gov.in OR site:.idsa.in OR site:.pib.gov.in date:2025-04-13'.
+2025-04-14 21:42:32,503 - INFO - Searching Tavily for specific query: '"India-China border" OR "India-Pakistan relations" OR "Indian Ocean security" OR "defence deals India" "geopolitical implications" "economic impact" site:.thehindu.com OR site:.indianexpress.com date:2025-04-13' (Broad Topic: India International Relations and Security)
+2025-04-14 21:42:36,019 - INFO -     Found 3 results for query: '"India-China border" OR "India-Pakistan relations" OR "Indian Ocean security" OR "defence deals India" "geopolitical implications" "economic impact" site:.thehindu.com OR site:.indianexpress.com date:2025-04-13'
+2025-04-14 21:42:37,023 - INFO - Searching Tavily for specific query: '"India foreign policy" "UNSC" OR "SCO" OR "G20" OR "ASEAN" "environmental security" OR "maritime security" "scientific cooperation" site:idsa.in OR site:orfonline.org date:2025-04-13' (Broad Topic: India International Relations and Security)
+2025-04-14 21:42:40,435 - INFO -     Found 3 results for query: '"India foreign policy" "UNSC" OR "SCO" OR "G20" OR "ASEAN" "environmental security" OR "maritime security" "scientific cooperation" site:idsa.in OR site:orfonline.org date:2025-04-13'
+2025-04-14 21:42:41,439 - INFO - Collected 6 unique results for broad topic: India International Relations and Security
+2025-04-14 21:42:41,439 - INFO - Generating search queries for topic: Social Issues in India
+2025-04-14 21:42:42,890 - INFO - Successfully generated 3 queries for 'Social Issues in India'.
+2025-04-14 21:42:42,890 - INFO - Searching Tavily for specific query: '"social justice" "government schemes" "India" site:pib.gov.in OR site:prsindia.org date:2025-04-13' (Broad Topic: Social Issues in India)
+2025-04-14 21:42:46,363 - INFO -     Found 3 results for query: '"social justice" "government schemes" "India" site:pib.gov.in OR site:prsindia.org date:2025-04-13'
+2025-04-14 21:42:47,368 - INFO - Searching Tavily for specific query: '"poverty" "inequality" "India" "policy changes" OR "economic impact" site:thehindu.com OR site:indianexpress.com date:2025-04-13' (Broad Topic: Social Issues in India)
+2025-04-14 21:42:50,869 - INFO -     Found 3 results for query: '"poverty" "inequality" "India" "policy changes" OR "economic impact" site:thehindu.com OR site:indianexpress.com date:2025-04-13'
+2025-04-14 21:42:51,875 - INFO - Searching Tavily for specific query: '"vulnerable populations" "social issues" "India" "women" OR "children" OR "minorities" site:drishtiias.com OR site:orfonline.org date:2025-04-13' (Broad Topic: Social Issues in India)
+2025-04-14 21:42:55,168 - INFO -     Found 2 results for query: '"vulnerable populations" "social issues" "India" "women" OR "children" OR "minorities" site:drishtiias.com OR site:orfonline.org date:2025-04-13'
+2025-04-14 21:42:56,174 - INFO - Collected 8 unique results for broad topic: Social Issues in India
+2025-04-14 21:42:56,174 - INFO - Generating search queries for topic: Current Events of National and International Importance
+2025-04-14 21:42:57,973 - INFO - Successfully generated 3 queries for 'Current Events of National and International Importance'.
+2025-04-14 21:42:57,973 - INFO - Searching Tavily for specific query: 'UPSC "national policy changes" "government schemes" "India" OR "international relations" site:.prsindia.in OR site:.pib.gov.in date:2025-04-13' (Broad Topic: Current Events of National and International Importance)
+2025-04-14 21:43:03,332 - WARNING -     No results found for query: 'UPSC "national policy changes" "government schemes" "India" OR "international relations" site:.prsindia.in OR site:.pib.gov.in date:2025-04-13'.
+2025-04-14 21:43:04,337 - INFO - Searching Tavily for specific query: '"economic indicators" "India" OR "global economy" AND ("UPSC" OR "civil services") AND ("environment" OR "geopolitics" OR "science and technology") date:2025-04-13' (Broad Topic: Current Events of National and International Importance)
+2025-04-14 21:43:07,876 - INFO -     Found 3 results for query: '"economic indicators" "India" OR "global economy" AND ("UPSC" OR "civil services") AND ("environment" OR "geopolitics" OR "science and technology") date:2025-04-13'
+2025-04-14 21:43:07,876 - INFO -     Filtered out 1 duplicate URLs for query: '"economic indicators" "India" OR "global economy" AND ("UPSC" OR "civil services") AND ("environment" OR "geopolitics" OR "science and technology") date:2025-04-13'
+2025-04-14 21:43:08,881 - INFO - Searching Tavily for specific query: '"significant events" "international affairs" OR "national importance" AND ("UPSC exam" OR "current affairs") AND ("historical context" OR "analysis") -"sports" -"entertainment" date:2025-04-13' (Broad Topic: Current Events of National and International Importance)
+2025-04-14 21:43:16,854 - INFO -     Found 3 results for query: '"significant events" "international affairs" OR "national importance" AND ("UPSC exam" OR "current affairs") AND ("historical context" OR "analysis") -"sports" -"entertainment" date:2025-04-13'
+2025-04-14 21:43:16,855 - INFO -     Filtered out 1 duplicate URLs for query: '"significant events" "international affairs" OR "national importance" AND ("UPSC exam" OR "current affairs") AND ("historical context" OR "analysis") -"sports" -"entertainment" date:2025-04-13'
+2025-04-14 21:43:17,856 - INFO - Collected 4 unique results for broad topic: Current Events of National and International Importance
+2025-04-14 21:43:17,856 - INFO - Formatting fetched news data into context for Gemini.
+2025-04-14 21:43:17,857 - INFO - Successfully formatted news context for Gemini.
+2025-04-14 21:43:17,860 - INFO - Compiling final report for date: 2025-04-13
+2025-04-14 21:43:39,410 - INFO - Successfully generated report content from Gemini.
+2025-04-14 21:43:39,424 - INFO - Building PDF document: daily_news_reports_gemini/UPSC Daily News Analysis - 2025-04-13.pdf
+2025-04-14 21:43:39,478 - INFO - Successfully generated PDF: daily_news_reports_gemini/UPSC Daily News Analysis - 2025-04-13.pdf
+2025-04-14 21:43:39,478 - INFO - Script finished.

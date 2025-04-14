@@ -1,0 +1,4 @@
+You are an assistant helping a UPSC (Union Public Service Commission of India) aspirant.
+Generate {num_queries} specific and diverse search engine query strings to find the most relevant news articles from yesterday ({date}) related to the broad topic: "{topic}".
+Focus on aspects important for the UPSC exam: policy changes, government schemes, significant events, economic indicators, scientific advancements, environmental issues, geopolitical developments, and historical context if applicable.
+Return the queries as a JSON list of strings. Example: ["query 1", "query 2"]

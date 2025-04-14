@@ -1,0 +1,9 @@
+2025-04-14 21:51:28,303 - INFO - Initializing Daily News Analyzer Application...
+2025-04-14 21:51:28,304 - INFO - Gemini API configured successfully.
+2025-04-14 21:51:28,305 - INFO - Successfully loaded Gemini prompt templates.
+2025-04-14 21:51:28,305 - INFO - Gemini client initialized with model 'models/gemini-2.0-flash'.
+2025-04-14 21:51:28,305 - INFO - Daily News Analyzer Application initialized successfully.
+2025-04-14 21:51:28,305 - INFO - Fetching news for date: 2025-04-13
+2025-04-14 21:51:28,305 - INFO - Generating search queries for topic: India Polity and Governance
+2025-04-14 21:51:31,087 - INFO - Successfully generated 3 queries for 'India Polity and Governance'.
+2025-04-14 21:51:31,087 - INFO - Searching Tavily for specific query: 'India polity governance news 2025-04-13: "policy changes" OR "government schemes" OR "significant events" UPSC' (Broad Topic: India Polity and Governance)

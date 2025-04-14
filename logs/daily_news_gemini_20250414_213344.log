@@ -1,0 +1,95 @@
+2025-04-14 21:33:44,563 - INFO - Initializing Daily News Analyzer Application...
+2025-04-14 21:33:44,563 - INFO - Gemini API configured successfully.
+2025-04-14 21:33:44,564 - INFO - Successfully loaded Gemini prompt templates.
+2025-04-14 21:33:44,564 - INFO - Gemini client initialized with model 'models/gemini-1.5-flash'.
+2025-04-14 21:33:44,564 - INFO - Daily News Analyzer Application initialized successfully.
+2025-04-14 21:33:44,564 - INFO - Fetching news for date: 2025-04-13
+2025-04-14 21:33:44,564 - INFO - Generating search queries for topic: India Polity and Governance
+2025-04-14 21:33:47,120 - INFO - Successfully generated 3 queries for 'India Polity and Governance'.
+2025-04-14 21:33:47,120 - INFO - Searching Tavily for specific query: '"India Polity and Governance" policy changes news April 13 2025' (Broad Topic: India Polity and Governance)
+2025-04-14 21:33:51,541 - WARNING -     No results found for query: '"India Polity and Governance" policy changes news April 13 2025'.
+2025-04-14 21:33:52,546 - INFO - Searching Tavily for specific query: '"India government schemes" significant events April 13 2025 UPSC' (Broad Topic: India Polity and Governance)
+2025-04-14 21:33:55,883 - WARNING -     No results found for query: '"India government schemes" significant events April 13 2025 UPSC'.
+2025-04-14 21:33:56,888 - INFO - Searching Tavily for specific query: 'India geopolitical developments economic indicators April 13 2025 news' (Broad Topic: India Polity and Governance)
+2025-04-14 21:33:59,803 - INFO -     Found 3 results for query: 'India geopolitical developments economic indicators April 13 2025 news'
+2025-04-14 21:34:00,804 - INFO - Collected 3 unique results for broad topic: India Polity and Governance
+2025-04-14 21:34:00,805 - INFO - Generating search queries for topic: India Economy and Development
+2025-04-14 21:34:02,053 - INFO - Successfully generated 3 queries for 'India Economy and Development'.
+2025-04-14 21:34:02,054 - INFO - Searching Tavily for specific query: '"India economy" AND ("policy changes" OR "government schemes") AND 2025-04-13' (Broad Topic: India Economy and Development)
+2025-04-14 21:34:05,554 - INFO -     Found 3 results for query: '"India economy" AND ("policy changes" OR "government schemes") AND 2025-04-13'
+2025-04-14 21:34:06,560 - INFO - Searching Tavily for specific query: '"India economic indicators" AND (GDP OR inflation OR FDI) AND 2025-04-13' (Broad Topic: India Economy and Development)
+2025-04-14 21:34:09,838 - WARNING -     No results found for query: '"India economic indicators" AND (GDP OR inflation OR FDI) AND 2025-04-13'.
+2025-04-14 21:34:10,844 - INFO - Searching Tavily for specific query: 'India development news 2025-04-13 ("environmental impact" OR "geopolitics" OR "scientific advancements")' (Broad Topic: India Economy and Development)
+2025-04-14 21:34:14,240 - INFO -     Found 3 results for query: 'India development news 2025-04-13 ("environmental impact" OR "geopolitics" OR "scientific advancements")'
+2025-04-14 21:34:15,242 - INFO - Collected 6 unique results for broad topic: India Economy and Development
+2025-04-14 21:34:15,243 - INFO - Generating search queries for topic: India Geography
+2025-04-14 21:34:16,123 - INFO - Successfully generated 3 queries for 'India Geography'.
+2025-04-14 21:34:16,123 - INFO - Searching Tavily for specific query: '"India Geography" policy changes 2025-04-13' (Broad Topic: India Geography)
+2025-04-14 21:34:19,453 - INFO -     Found 3 results for query: '"India Geography" policy changes 2025-04-13'
+2025-04-14 21:34:20,458 - INFO - Searching Tavily for specific query: '"India Geography" government schemes news 2025-04-13' (Broad Topic: India Geography)
+2025-04-14 21:34:24,204 - WARNING -     No results found for query: '"India Geography" government schemes news 2025-04-13'.
+2025-04-14 21:34:25,207 - INFO - Searching Tavily for specific query: 'India geographical events economic impact 2025-04-13' (Broad Topic: India Geography)
+2025-04-14 21:34:27,720 - INFO -     Found 3 results for query: 'India geographical events economic impact 2025-04-13'
+2025-04-14 21:34:28,727 - INFO - Collected 6 unique results for broad topic: India Geography
+2025-04-14 21:34:28,728 - INFO - Generating search queries for topic: India Environment and Ecology
+2025-04-14 21:34:29,701 - INFO - Successfully generated 3 queries for 'India Environment and Ecology'.
+2025-04-14 21:34:29,701 - INFO - Searching Tavily for specific query: '"India environment policy" changes 2025-04-13' (Broad Topic: India Environment and Ecology)
+2025-04-14 21:34:32,976 - WARNING -     No results found for query: '"India environment policy" changes 2025-04-13'.
+2025-04-14 21:34:33,982 - INFO - Searching Tavily for specific query: '"India environment" government schemes 2025-04-13' (Broad Topic: India Environment and Ecology)
+2025-04-14 21:34:37,074 - INFO -     Found 3 results for query: '"India environment" government schemes 2025-04-13'
+2025-04-14 21:34:38,076 - INFO - Searching Tavily for specific query: 'India environment ecology news 2025-04-13 UPSC' (Broad Topic: India Environment and Ecology)
+2025-04-14 21:34:40,507 - INFO -     Found 3 results for query: 'India environment ecology news 2025-04-13 UPSC'
+2025-04-14 21:34:41,509 - INFO - Collected 6 unique results for broad topic: India Environment and Ecology
+2025-04-14 21:34:41,510 - INFO - Generating search queries for topic: India Science and Technology
+2025-04-14 21:34:42,435 - INFO - Successfully generated 3 queries for 'India Science and Technology'.
+2025-04-14 21:34:42,435 - INFO - Searching Tavily for specific query: '"India Science and Technology" policy changes 2025-04-13' (Broad Topic: India Science and Technology)
+2025-04-14 21:34:45,608 - WARNING -     No results found for query: '"India Science and Technology" policy changes 2025-04-13'.
+2025-04-14 21:34:46,615 - INFO - Searching Tavily for specific query: '"India Science and Technology" government schemes funding 2025-04-13' (Broad Topic: India Science and Technology)
+2025-04-14 21:34:49,652 - WARNING -     No results found for query: '"India Science and Technology" government schemes funding 2025-04-13'.
+2025-04-14 21:34:50,658 - INFO - Searching Tavily for specific query: 'India scientific advancements geopolitical implications 2025-04-13' (Broad Topic: India Science and Technology)
+2025-04-14 21:34:53,156 - INFO -     Found 3 results for query: 'India scientific advancements geopolitical implications 2025-04-13'
+2025-04-14 21:34:54,162 - INFO - Collected 3 unique results for broad topic: India Science and Technology
+2025-04-14 21:34:54,162 - INFO - Generating search queries for topic: India Art, Culture, and History context in news
+2025-04-14 21:34:55,002 - INFO - Successfully generated 3 queries for 'India Art, Culture, and History context in news'.
+2025-04-14 21:34:55,002 - INFO - Searching Tavily for specific query: '"India art and culture policy" news April 13 2025' (Broad Topic: India Art, Culture, and History context in news)
+2025-04-14 21:34:58,342 - WARNING -     No results found for query: '"India art and culture policy" news April 13 2025'.
+2025-04-14 21:34:59,344 - INFO - Searching Tavily for specific query: '"Government schemes Indian historical sites" news April 13 2025' (Broad Topic: India Art, Culture, and History context in news)
+2025-04-14 21:35:02,831 - WARNING -     No results found for query: '"Government schemes Indian historical sites" news April 13 2025'.
+2025-04-14 21:35:03,835 - INFO - Searching Tavily for specific query: '"India cultural heritage conservation" economic impact April 13 2025' (Broad Topic: India Art, Culture, and History context in news)
+2025-04-14 21:35:07,000 - WARNING -     No results found for query: '"India cultural heritage conservation" economic impact April 13 2025'.
+2025-04-14 21:35:08,006 - WARNING - No unique results collected for broad topic: India Art, Culture, and History context in news
+2025-04-14 21:35:08,006 - INFO - Generating search queries for topic: India International Relations and Security
+2025-04-14 21:35:08,923 - INFO - Successfully generated 3 queries for 'India International Relations and Security'.
+2025-04-14 21:35:08,923 - INFO - Searching Tavily for specific query: '"India foreign policy" changes 2025-04-13' (Broad Topic: India International Relations and Security)
+2025-04-14 21:35:12,573 - WARNING -     No results found for query: '"India foreign policy" changes 2025-04-13'.
+2025-04-14 21:35:13,576 - INFO - Searching Tavily for specific query: '"India national security" news 2025-04-13' (Broad Topic: India International Relations and Security)
+2025-04-14 21:35:17,023 - WARNING -     No results found for query: '"India national security" news 2025-04-13'.
+2025-04-14 21:35:18,025 - INFO - Searching Tavily for specific query: 'India international relations geopolitical developments 2025-04-13' (Broad Topic: India International Relations and Security)
+2025-04-14 21:35:20,837 - INFO -     Found 3 results for query: 'India international relations geopolitical developments 2025-04-13'
+2025-04-14 21:35:21,840 - INFO - Collected 3 unique results for broad topic: India International Relations and Security
+2025-04-14 21:35:21,840 - INFO - Generating search queries for topic: Social Issues in India
+2025-04-14 21:35:22,742 - INFO - Successfully generated 3 queries for 'Social Issues in India'.
+2025-04-14 21:35:22,743 - INFO - Searching Tavily for specific query: '"India social issues" policy changes government schemes 2025-04-13' (Broad Topic: Social Issues in India)
+2025-04-14 21:35:26,273 - WARNING -     No results found for query: '"India social issues" policy changes government schemes 2025-04-13'.
+2025-04-14 21:35:27,279 - INFO - Searching Tavily for specific query: '"India social issues" economic indicators environment 2025-04-13' (Broad Topic: Social Issues in India)
+2025-04-14 21:35:30,695 - WARNING -     No results found for query: '"India social issues" economic indicators environment 2025-04-13'.
+2025-04-14 21:35:31,697 - INFO - Searching Tavily for specific query: '"India social issues" news events UPSC 2025-04-13' (Broad Topic: Social Issues in India)
+2025-04-14 21:35:34,907 - WARNING -     No results found for query: '"India social issues" news events UPSC 2025-04-13'.
+2025-04-14 21:35:35,912 - WARNING - No unique results collected for broad topic: Social Issues in India
+2025-04-14 21:35:35,913 - INFO - Generating search queries for topic: Current Events of National and International Importance
+2025-04-14 21:35:37,079 - INFO - Successfully generated 3 queries for 'Current Events of National and International Importance'.
+2025-04-14 21:35:37,079 - INFO - Searching Tavily for specific query: '"India policy changes" OR "government schemes India" OR "significant events India" date:2025-04-13' (Broad Topic: Current Events of National and International Importance)
+2025-04-14 21:35:40,362 - INFO -     Found 3 results for query: '"India policy changes" OR "government schemes India" OR "significant events India" date:2025-04-13'
+2025-04-14 21:35:41,368 - INFO - Searching Tavily for specific query: '"economic indicators India" OR "scientific advancements India" OR "environmental issues India" date:2025-04-13' (Broad Topic: Current Events of National and International Importance)
+2025-04-14 21:35:45,246 - INFO -     Found 3 results for query: '"economic indicators India" OR "scientific advancements India" OR "environmental issues India" date:2025-04-13'
+2025-04-14 21:35:45,247 - INFO -     Filtered out 1 duplicate URLs for query: '"economic indicators India" OR "scientific advancements India" OR "environmental issues India" date:2025-04-13'
+2025-04-14 21:35:46,252 - INFO - Searching Tavily for specific query: '"geopolitical developments Asia" OR "international relations India" OR "global economics" date:2025-04-13' (Broad Topic: Current Events of National and International Importance)
+2025-04-14 21:35:49,883 - INFO -     Found 3 results for query: '"geopolitical developments Asia" OR "international relations India" OR "global economics" date:2025-04-13'
+2025-04-14 21:35:50,885 - INFO - Collected 8 unique results for broad topic: Current Events of National and International Importance
+2025-04-14 21:35:50,885 - INFO - Formatting fetched news data into context for Gemini.
+2025-04-14 21:35:50,886 - INFO - Successfully formatted news context for Gemini.
+2025-04-14 21:35:50,888 - INFO - Compiling final report for date: 2025-04-13
+2025-04-14 21:36:15,807 - INFO - Successfully generated report content from Gemini.
+2025-04-14 21:36:15,819 - INFO - Building PDF document: daily_news_reports_gemini/UPSC Daily News Analysis - 2025-04-13.pdf
+2025-04-14 21:36:15,876 - INFO - Successfully generated PDF: daily_news_reports_gemini/UPSC Daily News Analysis - 2025-04-13.pdf
+2025-04-14 21:36:15,876 - INFO - Script finished.

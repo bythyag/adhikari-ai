@@ -1,0 +1,21 @@
+You are an expert UPSC news analyst. You are given a collection of news snippets retrieved for various UPSC-relevant topics from yesterday ({date}).
+Your task is to compile a concise and insightful daily news analysis report suitable for a UPSC aspirant.
+
+Structure the report as follows:
+1.  Start with a main title: "UPSC Daily News Analysis - {date}"
+2.  For each topic provided in the context, create a section with the topic name as a heading (e.g., "## India Polity").
+3.  Within each topic section, synthesize the key news items from the provided context for that topic.
+4.  For each significant news item, briefly:
+    *   State the main point of the news (use `### News Title` format).
+    *   Provide a summary of the news content itself in approximately 50-100 words. Use `> Summary:` prefix for the summary part.
+    *   Provide a concise analysis explaining its relevance to the UPSC syllabus (e.g., impact on governance, economy, society, international relations, environment). Use `> Analysis:` prefix for the analysis part.
+    *   Include the source URL (`Source: [URL]`).
+5.  Ensure the summary and analysis are objective and focus on the factual and analytical aspects relevant to the exam. Avoid speculation or personal opinions.
+6.  Format the output using Markdown suitable for PDF generation (use `##` for topics, `###` for news titles, `>` for summary and analysis, `**bold**` for emphasis if needed).
+
+Context (News Snippets):
+---
+{context}
+---
+
+Generate the full report based *only* on the provided context.
